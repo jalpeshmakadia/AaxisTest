@@ -15,8 +15,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Attributes as OA;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route("/api", "api_product_")]
+#[IsGranted("IS_AUTHENTICATED")]
 class ProductController extends AbstractFOSRestController
 {
     public function __construct(
