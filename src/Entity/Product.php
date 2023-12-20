@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'product')]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(fields: ['sku'], message: 'This sku is already in use.')]
+#[UniqueEntity(fields: ['sku'], message: "The {{ value }} sku already in use.")]
 class Product
 {
     #[ORM\Id]
@@ -20,7 +20,6 @@ class Product
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
-    #[Assert\Unique]
     #[ORM\Column(type: Types::STRING, length: 50, unique: true)]
     private ?string $sku;
 
@@ -79,23 +78,37 @@ class Product
     {
         return $this->createdAt;
     }
-
-    #[ORM\PrePersist]
+    
     public function setCreatedAt(?\DateTime $createdAt): void
     {
-        $this->createdAt = (empty($createdAt)) ? new \DateTime('now') : $createdAt;
+        $this->createdAt = $createdAt;
     }
 
     public function getUpdateAt(): ?\DateTime
     {
         return $this->updateAt;
     }
-
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
+    
     public function setUpdateAt(?\DateTime $updateAt): void
     {
-        $this->updateAt = (empty($updateAt)) ? new \DateTime('now') : $updateAt;;
+        $this->updateAt = $updateAt;
     }
-
+    
+    /**
+     * Gets triggered only on insert
+     */
+    #[ORM\PrePersist]
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime("now");
+    }
+    
+    /**
+     * Gets triggered every time on update
+     */
+    #[ORM\PreUpdate]
+    public function onPreUpdate()
+    {
+        $this->updateAt = new \DateTime("now");
+    }
 }

@@ -32,8 +32,8 @@
 /vendor/
 
 # Assets and user uploads
-/web/bundles/
-/web/uploads/
+/public/bundles/
+/public/uploads/
 
 # PHPUnit
 /app/phpunit.xml
@@ -50,3 +50,6 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+
+# IDE
+.idea/
