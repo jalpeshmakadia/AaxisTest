@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -17,9 +18,9 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route("/api", "api_product_")]
+#[Route("/api", "api_product_", format: 'json')]
 #[IsGranted("IS_AUTHENTICATED")]
-class ProductController extends AbstractFOSRestController
+class ProductController extends AbstractController
 {
     public function __construct(
         private ProductRepository $productRepository,
@@ -34,13 +35,13 @@ class ProductController extends AbstractFOSRestController
         description: 'Returns the list of products',
         content: new OA\JsonContent( type: 'array', items: new OA\Items(ref: new Model(type: Product::class)))
     )]
-    public function listProduct(): Response
+    public function listProduct(): JsonResponse
     {
         $response = [];
         $products = $this->productRepository->findAll();
         $response['status'] = Response::HTTP_OK;
         $response['data'] = $products;
-        return $this->handleView($this->view($response));
+        return $this->json($response, $response['status']);
     }
 
     #[Route("/product/{id}", "get", requirements: ['id' => '\d+'], methods: ["GET"])]
@@ -63,8 +64,8 @@ class ProductController extends AbstractFOSRestController
         
         $response['status'] = Response::HTTP_NOT_FOUND;
         $response['error'] = sprintf('Product with id %d not found.', $id);
-        
-        return $this->handleView($this->view($response, Response::HTTP_NOT_FOUND));
+
+        return $this->json($response, $response['status']);
     }
 
     #[Route("/product/update", "update", methods: ["PUT"])]
@@ -127,6 +128,6 @@ class ProductController extends AbstractFOSRestController
             
         }
 
-        return $this->handleView($this->view($response, $response['status']));
+        return $this->json($response, $response['status']);
     }
 }
