@@ -101,6 +101,7 @@ class Product
     public function onPrePersist()
     {
         $this->createdAt = new \DateTime("now");
+        $this->updateAt = new \DateTime("now");
     }
     
     /**
