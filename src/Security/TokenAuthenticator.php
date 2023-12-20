@@ -44,7 +44,7 @@ class TokenAuthenticator extends AbstractAuthenticator
         // e.g. by looking up a user in the database using its API key
 
         try {
-            $user = $this->userRepository->findOneBy(['token'=>$apiToken]);
+            $user = $this->userRepository->findOneBy(['token' => $apiToken]);
         } catch (UsernameNotFoundException $e) {
             throw new CustomUserMessageAuthenticationException('Invalid token.');
         }
