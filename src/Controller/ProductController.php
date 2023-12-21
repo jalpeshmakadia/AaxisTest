@@ -51,7 +51,7 @@ class ProductController extends AbstractController
     {
         $response = [];
         $id = $request->get('id');
-        $product = $this->productRepository->find($request->get('id'));
+        $product = $this->productRepository->find($id);
         
         if (!empty($product)) {
             $response['status'] = Response::HTTP_OK;
@@ -82,10 +82,10 @@ class ProductController extends AbstractController
     public function updateProducts(Request $request, ValidatorInterface $validator): Response
     {
         $response = [];
-        $requestProductData = json_decode($request->getContent(), true);
-    
+
         try {
-            
+
+            $requestProductData = json_decode($request->getContent(), true);
             foreach ($requestProductData as $requestProduct) {
         
                 $product = $this->productRepository->findOneBy(['sku' => $requestProduct['sku']]);
@@ -114,10 +114,8 @@ class ProductController extends AbstractController
                 } else {
                     $response['data']['error'][$requestProduct['sku']] = sprintf('Product not found with sku - %s', $requestProduct['sku']);
                 }
-                
-                $response['status'] = Response::HTTP_OK;
             }
-            
+            $response['status'] = Response::HTTP_OK;
         } catch (\Exception $e) {
             
             $response['status'] = Response::HTTP_BAD_REQUEST;
