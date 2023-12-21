@@ -56,7 +56,7 @@ class ProductController extends AbstractController
         if (!empty($product)) {
             $response['status'] = Response::HTTP_OK;
             $response['data'] = $product;
-            return $this->handleView($this->view($response));
+            return $this->json($response, $response['status']);
         }
         
         $response['status'] = Response::HTTP_NOT_FOUND;

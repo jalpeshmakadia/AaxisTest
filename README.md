@@ -36,6 +36,8 @@ It will create one dummy user in the database with below email and password.
 ## REST API Document
 
 For the documentation of API you need to run asset install command.
+You must need to set header `X-AUTH-TOKEN` with each request. you can get this header value via login api `/createClient`
+it will return `token`.  Example `X-AUTH-TOKEN : 588954ff2809fdcb6eea6979f15e712572b9`
 ```sh
   php bin/console assets:install
 ```
