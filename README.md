@@ -35,8 +35,11 @@ It will create one dummy user in the database with below email and password.
 
 ## REST API Document
 
-Get api document.
-
+For the documentation of API you need to run asset install command.
+```sh
+  php bin/console assets:install
+```
+Then navigate to the below url
 ```http
   GET /
 ```
